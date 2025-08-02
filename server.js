@@ -82,27 +82,27 @@ function generateToken(user) {
 app.post('/api/auth/signup', async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
-        
+
         // Validate input
         if (!firstName || !lastName || !email || !password) {
             return res.status(400).json({ error: 'All fields are required' });
         }
-        
+
         if (password.length < 6) {
             return res.status(400).json({ error: 'Password must be at least 6 characters' });
         }
-        
+
         // Check if user already exists
         const users = getUsers();
         const existingUser = users.find(user => user.email === email);
-        
+
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists with this email' });
         }
-        
+
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
-        
+
         // Create new user
         const newUser = {
             id: Date.now().toString(),
@@ -112,14 +112,14 @@ app.post('/api/auth/signup', async (req, res) => {
             password: hashedPassword,
             createdAt: new Date().toISOString()
         };
-        
+
         // Save user
         users.push(newUser);
         saveUsers(users);
-        
+
         // Generate token
         const token = generateToken(newUser);
-        
+
         // Return user data (without password)
         const userData = {
             id: newUser.id,
@@ -128,14 +128,14 @@ app.post('/api/auth/signup', async (req, res) => {
             email: newUser.email,
             name: `${newUser.firstName} ${newUser.lastName}`
         };
-        
+
         res.json({
             success: true,
             message: 'Account created successfully',
             token,
             user: userData
         });
-        
+
     } catch (error) {
         console.error('Sign up error:', error);
         res.status(500).json({ error: 'Failed to create account' });
@@ -146,30 +146,30 @@ app.post('/api/auth/signup', async (req, res) => {
 app.post('/api/auth/signin', async (req, res) => {
     try {
         const { email, password } = req.body;
-        
+
         // Validate input
         if (!email || !password) {
             return res.status(400).json({ error: 'Email and password are required' });
         }
-        
+
         // Find user
         const users = getUsers();
         const user = users.find(u => u.email === email);
-        
+
         if (!user) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        
+
         // Check password
         const isValidPassword = await bcrypt.compare(password, user.password);
-        
+
         if (!isValidPassword) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        
+
         // Generate token
         const token = generateToken(user);
-        
+
         // Return user data (without password)
         const userData = {
             id: user.id,
@@ -178,14 +178,14 @@ app.post('/api/auth/signin', async (req, res) => {
             email: user.email,
             name: `${user.firstName} ${user.lastName}`
         };
-        
+
         res.json({
             success: true,
             message: 'Signed in successfully',
             token,
             user: userData
         });
-        
+
     } catch (error) {
         console.error('Sign in error:', error);
         res.status(500).json({ error: 'Failed to sign in' });
@@ -196,18 +196,18 @@ app.post('/api/auth/signin', async (req, res) => {
 app.post('/api/auth/google', (req, res) => {
     try {
         const { credential } = req.body;
-        
+
         if (!credential) {
             return res.status(400).json({ error: 'Google credential is required' });
         }
-        
+
         // Decode the JWT token from Google
         const payload = JSON.parse(Buffer.from(credential.split('.')[1], 'base64').toString());
-        
+
         // Check if user exists
         const users = getUsers();
         let user = users.find(u => u.email === payload.email);
-        
+
         if (!user) {
             // Create new user from Google data
             user = {
@@ -219,14 +219,14 @@ app.post('/api/auth/google', (req, res) => {
                 picture: payload.picture,
                 createdAt: new Date().toISOString()
             };
-            
+
             users.push(user);
             saveUsers(users);
         }
-        
+
         // Generate token
         const token = generateToken(user);
-        
+
         // Return user data
         const userData = {
             id: user.id,
@@ -236,14 +236,14 @@ app.post('/api/auth/google', (req, res) => {
             name: `${user.firstName} ${user.lastName}`,
             picture: user.picture
         };
-        
+
         res.json({
             success: true,
             message: 'Google authentication successful',
             token,
             user: userData
         });
-        
+
     } catch (error) {
         console.error('Google auth error:', error);
         res.status(500).json({ error: 'Failed to authenticate with Google' });
@@ -253,11 +253,11 @@ app.post('/api/auth/google', (req, res) => {
 // Verify token middleware
 function verifyToken(req, res, next) {
     const token = req.headers.authorization?.split(' ')[1];
-    
+
     if (!token) {
         return res.status(401).json({ error: 'Access token required' });
     }
-    
+
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
@@ -271,11 +271,11 @@ function verifyToken(req, res, next) {
 app.get('/api/auth/profile', verifyToken, (req, res) => {
     const users = getUsers();
     const user = users.find(u => u.id === req.user.id);
-    
+
     if (!user) {
         return res.status(404).json({ error: 'User not found' });
     }
-    
+
     const userData = {
         id: user.id,
         firstName: user.firstName,
@@ -284,7 +284,7 @@ app.get('/api/auth/profile', verifyToken, (req, res) => {
         name: `${user.firstName} ${user.lastName}`,
         picture: user.picture
     };
-    
+
     res.json({ user: userData });
 });
 
@@ -303,7 +303,7 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
         }
 
         const imageUrl = `/uploads/${req.file.filename}`;
-        
+
         // Save image info to a JSON file for persistence
         const imageInfo = {
             id: Date.now(),
@@ -317,7 +317,7 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
         // Read existing images or create new array
         let images = [];
         const imagesFile = path.join(__dirname, 'uploads', 'images.json');
-        
+
         if (fs.existsSync(imagesFile)) {
             const data = fs.readFileSync(imagesFile, 'utf8');
             images = JSON.parse(data);
@@ -345,7 +345,7 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
 app.get('/api/images', (req, res) => {
     try {
         const imagesFile = path.join(__dirname, 'uploads', 'images.json');
-        
+
         if (fs.existsSync(imagesFile)) {
             const data = fs.readFileSync(imagesFile, 'utf8');
             const images = JSON.parse(data);
@@ -364,28 +364,28 @@ app.delete('/api/images/:id', (req, res) => {
     try {
         const imageId = parseInt(req.params.id);
         const imagesFile = path.join(__dirname, 'uploads', 'images.json');
-        
+
         if (fs.existsSync(imagesFile)) {
             const data = fs.readFileSync(imagesFile, 'utf8');
             let images = JSON.parse(data);
-            
+
             const imageIndex = images.findIndex(img => img.id === imageId);
-            
+
             if (imageIndex !== -1) {
                 const image = images[imageIndex];
-                
+
                 // Delete the actual file
                 const filePath = path.join(__dirname, 'uploads', image.filename);
                 if (fs.existsSync(filePath)) {
                     fs.unlinkSync(filePath);
                 }
-                
+
                 // Remove from images array
                 images.splice(imageIndex, 1);
-                
+
                 // Save updated images list
                 fs.writeFileSync(imagesFile, JSON.stringify(images, null, 2));
-                
+
                 res.json({ success: true, message: 'Image deleted successfully' });
             } else {
                 res.status(404).json({ error: 'Image not found' });
@@ -425,6 +425,8 @@ app.post('/api/report', upload.single('image'), (req, res) => {
         const report = {
             id: Date.now(),
             location: fields.location,
+            latitude: fields.latitude || null,
+            longitude: fields.longitude || null,
             type: fields['report-type'],
             description: fields.description,
             size: fields.size || 'Not specified',
@@ -437,6 +439,7 @@ app.post('/api/report', upload.single('image'), (req, res) => {
             timestamp: new Date().toISOString(),
             comments: []
         };
+
         // Read existing reports
         let reports = [];
         if (fs.existsSync(reportsFile)) {
@@ -494,7 +497,7 @@ app.use((error, req, res, next) => {
             return res.status(400).json({ error: 'File too large. Maximum size is 10MB.' });
         }
     }
-    
+
     console.error('Server error:', error);
     res.status(500).json({ error: 'Internal server error' });
 });
