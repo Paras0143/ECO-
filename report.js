@@ -1,6 +1,6 @@
 // report.js - Enhanced constraints and style for report.html
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('report-form');
     const imageInput = document.getElementById('image');
     const uploadArea = document.getElementById('upload-area');
@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalClose = document.getElementById('modal-close');
 
     // Character counter for description
-    description.addEventListener('input', function() {
+    description.addEventListener('input', function () {
         const count = this.value.length;
         charCount.textContent = `${count}/300`;
-        
+
         if (count > 250) {
             charCount.classList.add('text-red-500');
         } else {
@@ -29,20 +29,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Drag and drop functionality
-    uploadArea.addEventListener('dragover', function(e) {
+    uploadArea.addEventListener('dragover', function (e) {
         e.preventDefault();
         this.parentElement.classList.add('border-emerald-400', 'bg-emerald-50');
     });
 
-    uploadArea.addEventListener('dragleave', function(e) {
+    uploadArea.addEventListener('dragleave', function (e) {
         e.preventDefault();
         this.parentElement.classList.remove('border-emerald-400', 'bg-emerald-50');
     });
 
-    uploadArea.addEventListener('drop', function(e) {
+    uploadArea.addEventListener('drop', function (e) {
         e.preventDefault();
         this.parentElement.classList.remove('border-emerald-400', 'bg-emerald-50');
-        
+
         const files = e.dataTransfer.files;
         if (files.length > 0) {
             handleImageFile(files[0]);
@@ -50,19 +50,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Click to upload
-    uploadArea.addEventListener('click', function() {
+    uploadArea.addEventListener('click', function () {
         imageInput.click();
     });
 
     // File input change
-    imageInput.addEventListener('change', function() {
+    imageInput.addEventListener('change', function () {
         if (this.files.length > 0) {
             handleImageFile(this.files[0]);
         }
     });
 
     // Remove image
-    removeImageBtn.addEventListener('click', function() {
+    removeImageBtn.addEventListener('click', function () {
         imageInput.value = '';
         imagePreview.classList.add('hidden');
         uploadArea.classList.remove('hidden');
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             previewImg.src = e.target.result;
             imagePreview.classList.remove('hidden');
             uploadArea.classList.add('hidden');
@@ -91,19 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Form submission
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         // Validate required fields
-        const location = document.getElementById('location').value.trim();
+        const location = document.getElementById('map').value;
+        const longitude = document.getElementById('longitude').value;
+        const latitude = document.getElementById('latitude').value;
         const reportType = document.getElementById('report-type').value;
         const descriptionText = description.value.trim();
         const imageFile = imageInput.files[0];
 
-        if (!location || location.length < 3) {
-            showError('Please enter a valid location (minimum 3 characters).');
-            return;
-        }
+        // if (!location || location.length < 3) {
+        //     showError('Please enter a valid location (minimum 3 characters).');
+        //     return;
+        // }
 
         if (!reportType) {
             showError('Please select a report type.');
@@ -126,6 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Prepare FormData
         const formData = new FormData();
         formData.append('location', location);
+        formData.append('latitude', longitude || '');
+        formData.append('longitude', latitude || '');
         formData.append('report-type', reportType);
         formData.append('description', descriptionText);
         formData.append('size', document.getElementById('size').value || '');
@@ -135,10 +139,16 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('image', imageFile);
 
         try {
+            console.log("response not sent")
+            for (const value of formData.values()) {
+                console.log(value);
+            }
+
             const response = await fetch('/api/report', {
                 method: 'POST',
                 body: formData
             });
+            console.log("response sent")
             loadingModal.classList.add('hidden');
             const result = await response.json();
             if (response.ok && result.success) {
@@ -191,14 +201,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Modal close and redirect
-    modalClose.addEventListener('click', function() {
+    modalClose.addEventListener('click', function () {
         resultModal.classList.add('hidden');
         // Redirect to status section on homepage
         window.location.href = 'index.html#status-section';
     });
 
     // Close modal on outside click
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
         if (e.target === resultModal) {
             resultModal.classList.add('hidden');
             window.location.href = 'index.html#status-section';
@@ -208,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form validation feedback
     const inputs = form.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
-        input.addEventListener('blur', function() {
+        input.addEventListener('blur', function () {
             if (this.hasAttribute('required') && !this.value.trim()) {
                 this.classList.add('border-red-500', 'ring-red-200');
             } else {
@@ -216,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        input.addEventListener('input', function() {
+        input.addEventListener('input', function () {
             if (this.value.trim()) {
                 this.classList.remove('border-red-500', 'ring-red-200');
             }
@@ -226,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add some visual feedback for form interactions
     const labels = form.querySelectorAll('label');
     labels.forEach(label => {
-        label.addEventListener('click', function() {
+        label.addEventListener('click', function () {
             const input = this.nextElementSibling;
             if (input && input.tagName !== 'DIV') {
                 input.focus();
