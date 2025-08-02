@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoVision Waste Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.3); }
+        50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6); }
+      }
+      .animated-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease-in-out infinite;
+        opacity: 0.8;
+      }
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+      .floating {
+        animation: float 6s ease-in-out infinite;
+      }
+      .pulse-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+      h1, h2, h3, .font-heading { font-family: 'Poppins', sans-serif; }
+      body { font-family: 'Inter', sans-serif; }
+      /* Modern glow effects */
+      .glow-red { 
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), 0 0 40px rgba(239, 68, 68, 0.2) !important; 
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .glow-orange { 
+        box-shadow: 0 0 20px rgba(245, 158, 66, 0.4), 0 0 40px rgba(245, 158, 66, 0.2) !important; 
+        border: 1px solid rgba(245, 158, 66, 0.3);
+      }
+      .glow-yellow { 
+        box-shadow: 0 0 20px rgba(250, 204, 21, 0.4), 0 0 40px rgba(250, 204, 21, 0.2) !important; 
+        border: 1px solid rgba(250, 204, 21, 0.3);
+      }
+      .glow-green { 
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.4), 0 0 40px rgba(34, 197, 94, 0.2) !important; 
+        border: 1px solid rgba(34, 197, 94, 0.3);
+      }
+      /* Modern button styles */
+      .btn-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
+      .btn-modern:hover::before {
+        left: 100%;
+      }
+      .btn-modern:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+      }
+      /* Card hover effects */
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-hover:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      }
+      /* Modern input styles */
+      .input-modern {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        transition: all 0.3s ease;
+      }
+      .input-modern:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+      }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 min-h-screen font-sans text-gray-800 overflow-x-hidden">
+    <!-- Sticky Header with Glassmorphism -->
+    <header id="main-navbar" class="sticky top-0 z-50 bg-white/10 backdrop-blur-xl border-b border-white/20 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-6">
+                    <div class="relative">
+                        <img src="image3.webp" alt="Clean and Healthy Area Logo" class="h-16 w-16 rounded-2xl object-cover border-4 border-white/30 shadow-2xl"/>
+                        <div class="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-2xl blur opacity-30"></div>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-3xl font-black text-gray-800 tracking-tight font-heading">Clean and Healthy Area</span>
+                        <span id="slogan-rotator" class="text-gray-600 text-lg font-medium leading-tight">Cleaner Communities, Greener Future</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <nav class="flex items-center gap-8 px-8 py-4 rounded-3xl bg-white/20 backdrop-blur-xl shadow-xl border border-white/30">
+                        <a href="index.html" class="font-semibold text-lg text-gray-800 hover:text-emerald-600 transition-all duration-300 relative group">
+                            Home
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="report.html" class="font-semibold text-lg text-gray-800 hover:text-emerald-600 transition-all duration-300 relative group">
+                            Report
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#dashboard-section" class="font-semibold text-lg text-gray-800 hover:text-emerald-600 transition-all duration-300 relative group">
+                            Dashboard
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#about" class="font-semibold text-lg text-gray-800 hover:text-emerald-600 transition-all duration-300 relative group">
+                            About
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#contact" class="font-semibold text-lg text-gray-800 hover:text-emerald-600 transition-all duration-300 relative group">
+                            Contact
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                    </nav>
+                    <div class="flex items-center gap-4">
+                        <a href="signin.html" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
+                            <i class="fa-solid fa-sign-in-alt mr-2"></i>Sign In
+                        </a>
+                        <a href="signup.html" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
+                            <i class="fa-solid fa-user-plus mr-2"></i>Sign Up
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Enhanced Video Background -->
+    <section class="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-transparent z-10"></div>
+        <video id="hero-video" autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover object-center z-0">
+            <source src="download.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+        <div class="relative z-20 text-center text-white px-6">
+            <h1 class="text-6xl md:text-8xl font-black mb-6 font-heading drop-shadow-2xl">
+                <span class="bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">EcoVision</span>
+            </h1>
+            <p class="text-2xl md:text-3xl font-medium mb-8 drop-shadow-lg max-w-3xl mx-auto">
+                Empowering communities to create a cleaner, healthier world
+            </p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="report.html" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-8 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300">
+                    <i class="fa-solid fa-flag mr-3"></i>Report Issue
+                </a>
+                <a href="#about" class="bg-white/20 backdrop-blur-xl text-white px-8 py-4 rounded-2xl font-bold text-xl shadow-2xl hover:scale-105 transition-all duration-300 border border-white/30">
+                    <i class="fa-solid fa-info-circle mr-3"></i>Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Gallery Section with Modern Cards -->
+    <section class="max-w-7xl mx-auto mt-20 px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-black text-gray-800 mb-4 font-heading">Our Mission in Action</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Discover how we're making a difference in communities around the world</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-3xl">
+                <img src="images/img1.avif" alt="Clean and Healthy Environment" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Protect Nature, Preserve Life</span>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-3xl">
+                <img src="images/img2.webp" alt="Clean and Healthy Environment" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Every Action Counts</span>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-3xl">
+                <img src="images/img4.avif" alt="Clean and Healthy Environment" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Sustainable Living, Sustainable Future</span>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl transition-all duration-500 hover:scale-105 hover:shadow-3xl">
+                <img src="images/banner_29.jpg" alt="Clean and Healthy Environment" class="w-full h-64 object-cover object-center transition-transform duration-500 group-hover:scale-110"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Cleaner Communities, Greener Future</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Filter Bar and Legend -->
+    <section class="max-w-7xl mx-auto px-6 mt-16 mb-8">
+      <div class="bg-white/20 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div class="flex flex-wrap gap-3 items-center">
+            <button class="type-filter-btn bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-type="all">All</button>
+            <button class="type-filter-btn bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-700 px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-type="garbage"><i class="fa-solid fa-trash mr-2"></i> Garbage</button>
+            <button class="type-filter-btn bg-gradient-to-r from-red-100 to-red-200 text-red-700 px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-type="animal_death"><i class="fa-solid fa-skull-crossbones mr-2"></i> Animal Death</button>
+            <button class="type-filter-btn bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-6 py-3 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-type="animal_adopt"><i class="fa-solid fa-paw mr-2"></i> Animal Adopt</button>
+          </div>
+          <div class="flex gap-6 items-center text-sm">
+            <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl shadow-md"><i class="fa-solid fa-trash text-emerald-500"></i> Garbage Cleaning</span>
+            <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl shadow-md"><i class="fa-solid fa-skull-crossbones text-red-500"></i> Animal Death</span>
+            <span class="inline-flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl shadow-md"><i class="fa-solid fa-paw text-blue-500"></i> Animal Adoption/Care</span>
+          </div>
+        </div>
+        <div id="type-summary" class="mt-4 text-emerald-700 font-semibold text-lg"></div>
+      </div>
+    </section>
+
+    <!-- Enhanced Notification Banner -->
+    <div id="priority-banner" class="hidden max-w-7xl mx-auto px-6 py-4 mb-6 bg-gradient-to-r from-red-100 to-red-200 border-l-4 border-red-500 text-red-800 font-bold flex items-center gap-3 shadow-2xl rounded-2xl animate-pulse">
+      <i class="fa-solid fa-triangle-exclamation text-2xl"></i> 
+      <span class="text-lg">Urgent: There are unresolved Animal Death reports that need immediate attention!</span>
+    </div>
+
+    <!-- Top Priority Section -->
+    <section id="top-priority-section" class="max-w-7xl mx-auto px-6 mb-8"></section>
+
+    <!-- Main Content with Enhanced Cards -->
+    <main class="max-w-7xl mx-auto px-6 mt-16 flex flex-col lg:flex-row gap-12 items-start">
+        <div class="flex flex-col gap-8 flex-[2_1_0%] w-full">
+            <section id="status-section" class="bg-white/20 backdrop-blur-xl rounded-3xl p-8 min-h-[300px] flex-1 shadow-2xl border border-white/30">
+                <h2 class="text-3xl font-black mb-6 text-gray-800 font-heading">Status Tracker</h2>
+                <div id="status-list" class="space-y-6">
+                    <!-- Status cards will be injected here -->
+                </div>
+            </section>
+            <section id="dashboard-section" class="bg-white/20 backdrop-blur-xl rounded-3xl p-8 min-h-[300px] flex-1 shadow-2xl border border-white/30">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-3xl font-black text-gray-800 font-heading">Reported Issues Dashboard</h2>
+                    <button id="clear-reports" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold px-6 py-3 rounded-2xl shadow-lg transition-all duration-300 hover:scale-105">Clear All Reports</button>
+                </div>
+                <div id="dashboard-map" class="flex flex-wrap gap-6 min-h-[200px]">
+                    <!-- Map or list of reports will be shown here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Enhanced img2 Gallery Section -->
+    <section class="max-w-6xl mx-auto mt-24 px-6 mb-16">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-black text-gray-800 mb-4 font-heading">Community Impact</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">See the real difference our community makes</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+                <img src="img2/img2-1.jpg" alt="Animal Reverence" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-img2" data-aos="zoom-in"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Together for a Greener Tomorrow</span>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+                <img src="img2/img2-2.jpg" alt="Your Report Makes a Difference" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-img2" data-aos="zoom-in"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Your Report Makes a Difference</span>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+                <img src="img2/img2-3.webp" alt="Cleaner Communities, Brighter Future" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-img2" data-aos="zoom-in"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Cleaner Communities, Brighter Future</span>
+                </div>
+            </div>
+            <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+                <img src="img2/img2-4.jpg" alt="Act Green, Live Clean" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-img2" data-aos="zoom-in"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                    <span class="text-white font-bold text-xl mb-6 drop-shadow-lg">Act Green, Live Clean</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Animal Gallery Section -->
+    <section class="max-w-6xl mx-auto mt-24 px-6 mb-16">
+      <h2 class="text-4xl font-black text-emerald-700 mb-12 text-center flex items-center justify-center gap-4 font-heading">
+        <i class="fa-solid fa-paw text-4xl text-emerald-400"></i> Animal Reverence & Protection
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+          <img src="imgd/1d.jpg" alt="Animals are revered as gods in India" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-imgd" data-aos="zoom-in"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <span class="text-white font-bold text-lg mb-6 drop-shadow-lg text-center">Animals are revered as gods in India</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+          <img src="imgd/2d.jpg" alt="Save and protect animals" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-imgd" data-aos="zoom-in"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <span class="text-white font-bold text-lg mb-6 drop-shadow-lg text-center">Save and protect animals</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+          <img src="imgd/3d.jpg" alt="Compassion for all living beings" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-imgd" data-aos="zoom-in"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <span class="text-white font-bold text-lg mb-6 drop-shadow-lg text-center">Compassion for all living beings</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+          <img src="imgd/4d.jpg" alt="Every life matters: protect our animals" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-imgd" data-aos="zoom-in"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <span class="text-white font-bold text-lg mb-6 drop-shadow-lg text-center">Every life matters: protect our animals</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+          <img src="imgd/5d.jpg" alt="Kindness to animals is a mark of a great nation" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-imgd" data-aos="zoom-in"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <span class="text-white font-bold text-lg mb-6 drop-shadow-lg text-center">Kindness to animals is a mark of a great nation</span>
+          </div>
+        </div>
+        <div class="relative group overflow-hidden rounded-3xl shadow-2xl card-hover">
+          <img src="imgd/6d.jpg" alt="Protect the voiceless, preserve our future" class="w-full h-80 object-cover object-center transition-transform duration-500 group-hover:scale-110" data-lightbox="gallery-imgd" data-aos="zoom-in"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+            <span class="text-white font-bold text-lg mb-6 drop-shadow-lg text-center">Protect the voiceless, preserve our future</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced About Section -->
+    <section id="about" class="max-w-6xl mx-auto mt-24 mb-16 px-6">
+        <div class="glass-card rounded-3xl p-12 shadow-2xl flex flex-col md:flex-row items-center md:items-start gap-12">
+            <div class="flex-1 md:pr-8">
+                <h2 class="text-4xl font-black text-gray-800 mb-6 font-heading">About Clean and Healthy Area</h2>
+                <p class="text-xl text-gray-700 leading-relaxed mb-8">Clean and Healthy Area is dedicated to building cleaner, greener communities by empowering citizens to report and resolve waste issues. Our mission is to protect the environment, promote sustainability, and inspire positive change for a better tomorrow.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-6 bg-white/50 rounded-2xl shadow-lg">
+                        <i class="fa-solid fa-leaf text-4xl text-emerald-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Environmental Protection</h3>
+                        <p class="text-gray-600">Safeguarding our natural resources</p>
+                    </div>
+                    <div class="text-center p-6 bg-white/50 rounded-2xl shadow-lg">
+                        <i class="fa-solid fa-users text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Community Engagement</h3>
+                        <p class="text-gray-600">Empowering local communities</p>
+                    </div>
+                    <div class="text-center p-6 bg-white/50 rounded-2xl shadow-lg">
+                        <i class="fa-solid fa-recycle text-4xl text-purple-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Sustainable Solutions</h3>
+                        <p class="text-gray-600">Creating lasting positive impact</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <img src="goal1.png" alt="Clean and Healthy Area Goal" class="w-full max-w-sm md:max-w-md rounded-3xl shadow-2xl object-cover"/>
+                <div class="absolute -inset-4 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-3xl blur opacity-30 -z-10"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Footer -->
+    <footer id="contact" class="bg-gradient-to-r from-emerald-50 to-blue-50 border-t border-emerald-200 py-12 mt-16">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-6">
+            <div class="text-emerald-700 font-bold text-lg">&copy; 2025 Clean and Healthy Area</div>
+            <div class="text-emerald-600 text-lg">Contact: <a href="mailto:paraskumar9953952680@gmail.com" class="text-emerald-700 hover:text-emerald-800 font-semibold transition-colors">paraskumar9953952680@gmail.com</a></div>
+        </div>
+    </footer>
+
+    <!-- Enhanced Modal for confirmation messages -->
+    <div id="modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+      <div class="glass-card rounded-3xl p-8 max-w-md w-full text-center shadow-2xl">
+        <div id="modal-message" class="text-xl font-semibold text-gray-800 mb-6"></div>
+        <button id="close-modal" class="btn-modern text-white px-8 py-3 rounded-2xl font-bold transition">Close</button>
+      </div>
+    </div>
+
+    <!-- Enhanced Loading spinner -->
+    <div id="loading" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+      <div class="glass-card rounded-3xl p-8 text-center shadow-2xl">
+        <div class="w-20 h-20 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="text-gray-700 font-semibold text-lg">Loading...</p>
+      </div>
+    </div>
+
+    <!-- Enhanced Floating Report Issue Button -->
+    <a href="report.html" id="floating-report-btn" class="fixed z-50 bottom-8 right-8 bg-gradient-to-r from-emerald-500 to-blue-500 text-white shadow-2xl rounded-2xl px-8 py-4 flex items-center gap-3 text-xl font-bold hover:scale-110 hover:shadow-3xl transition-all duration-300">
+      <i class="fa-solid fa-flag"></i> Report Issue
+    </a>
+
+    <!-- Enhanced Back to Top Button -->
+    <button id="back-to-top" class="fixed z-50 bottom-28 right-8 bg-white/20 backdrop-blur-xl text-gray-700 shadow-2xl rounded-2xl p-4 text-2xl font-bold hover:scale-110 transition-all duration-300 hidden border border-white/30" aria-label="Back to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Enhanced Lightbox Modal Structure -->
+    <div id="lightbox-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+      <div class="relative">
+        <img id="lightbox-img" src="" alt="Gallery Image" class="max-h-[80vh] max-w-[90vw] rounded-3xl shadow-3xl border-4 border-white/20"/>
+        <button id="lightbox-close" class="absolute top-4 right-4 bg-white/20 backdrop-blur-xl rounded-full p-3 text-gray-700 hover:text-emerald-600 transition border border-white/30"><i class="fa-solid fa-xmark text-xl"></i></button>
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-xl rounded-full p-3 text-gray-700 hover:text-emerald-600 transition border border-white/30"><i class="fa-solid fa-chevron-left text-xl"></i></button>
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-xl rounded-full p-3 text-gray-700 hover:text-emerald-600 transition border border-white/30"><i class="fa-solid fa-chevron-right text-xl"></i></button>
+      </div>
+    </div>
+
+    <!-- Animate On Scroll Library -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>AOS.init({ once: true, duration: 900, easing: 'ease-out-cubic' });</script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
+
