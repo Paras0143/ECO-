@@ -149,12 +149,13 @@
                         </a>
                     </nav>
                     <div class="flex items-center gap-4">
-                        <a href="signin.html" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
+                        <a href="signin.html" id="signin-btn" class="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
                             <i class="fa-solid fa-sign-in-alt mr-2"></i>Sign In
                         </a>
-                        <a href="signup.html" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
+                        <a href="signup.html" id="signup-btn" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 hover:scale-105">
                             <i class="fa-solid fa-user-plus mr-2"></i>Sign Up
                         </a>
+                         <div id="user-avatar" style="position: relative;"></div>
                     </div>
                 </div>
             </div>
@@ -430,6 +431,134 @@
     <script>AOS.init({ once: true, duration: 900, easing: 'ease-out-cubic' });</script>
     <script src="auth.js"></script>
     <script src="script.js"></script>
+    <script type="module">
+  // Firebase imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAj0gR2Qe_7EeDO_C7IAY1faKlilVi_KnM",
+    authDomain: "ecovision-waste-management.firebaseapp.com",
+    projectId: "ecovision-waste-management",
+    storageBucket: "ecovision-waste-management.appspot.com",
+    messagingSenderId: "734580869994",
+    appId: "1:734580869994:web:dd7dcc583f2e26d5563313"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+
+  const signinBtn = document.getElementById("signin-btn");
+  const signupBtn = document.getElementById("signup-btn");
+  const avatarDiv = document.getElementById("user-avatar");
+
+  // Check login state
+ onAuthStateChanged(auth, (user) => {
+  if (user) {
+    signinBtn.style.display = "none";
+    signupBtn.style.display = "none";
+    avatarDiv.innerHTML = "";
+
+    const avatar = document.createElement("div");
+    avatar.style.width = "40px";
+    avatar.style.height = "40px";
+    avatar.style.borderRadius = "50%";
+    avatar.style.backgroundColor = "#4caf50";
+    avatar.style.color = "#fff";
+    avatar.style.display = "flex";
+    avatar.style.alignItems = "center";
+    avatar.style.justifyContent = "center";
+    avatar.style.cursor = "pointer";
+    avatar.style.fontWeight = "bold";
+    avatar.style.position = "relative";
+    avatar.style.userSelect = "none";
+
+    if (user.photoURL) {
+      avatar.style.backgroundImage = `url(${user.photoURL})`;
+      avatar.style.backgroundSize = "cover";
+      avatar.style.backgroundPosition = "center";
+      avatar.textContent = "";
+    } else {
+      const initial = user.displayName?.[0] || user.email?.[0] || "?";
+      avatar.textContent = initial.toUpperCase();
+    }
+
+    const dropdown = document.createElement("div");
+    dropdown.style.position = "absolute";
+    dropdown.style.top = "50px";
+    dropdown.style.right = "0";
+    dropdown.style.backgroundColor = "#fff";
+    dropdown.style.border = "1px solid #ddd";
+    dropdown.style.borderRadius = "8px";
+    dropdown.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+    dropdown.style.minWidth = "220px";
+    dropdown.style.zIndex = "1000";
+    dropdown.style.padding = "10px 0";
+    dropdown.style.display = "none";
+
+    // Email (subtle top text)
+    const email = document.createElement("div");
+    email.textContent = user.email || "No Email";
+    email.style.fontSize = "13px";
+    email.style.color = "#555";
+    email.style.padding = "8px 16px";
+    email.style.borderBottom = "1px solid #eee";
+
+    // Menu Item Creator
+    const createMenuItem = (text, onClick, color = "#333") => {
+      const item = document.createElement("div");
+      item.textContent = text;
+      item.style.padding = "10px 16px";
+      item.style.cursor = "pointer";
+      item.style.color = color;
+      item.style.fontSize = "14px";
+      item.style.transition = "background-color 0.2s";
+      item.addEventListener("mouseenter", () => {
+        item.style.backgroundColor = "#f5f5f5";
+      });
+      item.addEventListener("mouseleave", () => {
+        item.style.backgroundColor = "#fff";
+      });
+      item.addEventListener("click", onClick);
+      return item;
+    };
+
+    const profileItem = createMenuItem("Profile", () => alert("Profile clicked"));
+    const settingsItem = createMenuItem("Settings", () => alert("Settings clicked"));
+    const logoutItem = createMenuItem("Logout", () => signOut(auth), "#d32f2f");
+    logoutItem.style.borderTop = "1px solid #eee";
+    logoutItem.style.marginTop = "6px";
+
+    dropdown.appendChild(email);
+    dropdown.appendChild(profileItem);
+    dropdown.appendChild(settingsItem);
+    dropdown.appendChild(logoutItem);
+
+    avatar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener("click", () => {
+      dropdown.style.display = "none";
+    });
+
+    avatar.appendChild(dropdown);
+    avatarDiv.appendChild(avatar);
+
+  } else {
+    signinBtn.style.display = "inline-block";
+    signupBtn.style.display = "inline-block";
+    avatarDiv.innerHTML = "";
+  }
+});
+
+
+</script>
+
 </body>
 </html> 
 
